@@ -1,0 +1,7 @@
+[deps]
+scikit-learn = ""
+causal-learn = ""
+
+[pip.deps]
+scikit-learn = ""
+causal-learn = ""
