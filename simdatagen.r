@@ -73,7 +73,7 @@ sim <- function(N, pval, thres){
     aicauc <- vector()
     bicauc <- vector()
 
-    for (i in 1:2){
+    for (i in 1:1){
     dat <- sim_data(sigma = sigma,QMat = QMat, guess = guess, slip = slip, n_students = N)
     res = run_simulation(dat,QMat, pval,thres)
     res = as.data.frame(lapply(res, as.factor))
