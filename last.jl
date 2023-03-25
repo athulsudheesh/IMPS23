@@ -12,7 +12,7 @@ select!(x2, Not(:Column1))
 select!(mi, Not(:Column1))
 select!(aic, Not(:Column1))
 select!(bic, Not(:Column1))
-siz = [20,50,100,200,500,1000]
+siz = [500, 1000, 2000]
 
 x2sd = CSV.read("x2sd.csv", DataFrame)
 
@@ -35,27 +35,27 @@ begin
         palette = :rainbow, grid=false,
         ylims=[0,1], xlabel ="Size", ylabel="Score")
     
-    AccPlot = plot(siz, x2.Acc, label="X2", title="Accuracy")
-    plot!(AccPlot, siz, mi.Acc, label="MI")
-    plot!(AccPlot, siz, aic.Acc, label="AIC")
-    plot!(AccPlot, siz, bic.Acc, label="BIC")
+    AccPlot = plot(siz, x2.Acc, ribbon = x2sd.Acc,label="X2", title="Accuracy")
+    plot!(AccPlot, siz, mi.Acc, label="MI", ribbon = misd.Acc)
+    plot!(AccPlot, siz, aic.Acc, label="AIC", ribbon = aicsd.Acc)
+    plot!(AccPlot, siz, bic.Acc, label="BIC", ribbon = bicsd.Acc)
 
-    SenPlot =  plot(siz, x2.Sen, label="X2", title="Sensitivity")
-    plot!(SenPlot, siz, mi.Sen, label="MI")
-    plot!(SenPlot, siz, aic.Sen, label="AIC")
-    plot!(SenPlot, siz, bic.Sen, label="BIC")
+    SenPlot =  plot(siz, x2.Sen, label="X2", title="Sensitivity",ribbon = x2sd.Sen)
+    plot!(SenPlot, siz, mi.Sen, label="MI", ribbon = misd.Sen)
+    plot!(SenPlot, siz, aic.Sen, label="AIC", ribbon = aicsd.Sen)
+    plot!(SenPlot, siz, bic.Sen, label="BIC", ribbon = bicsd.Sen)
 
-    SpePlot =  plot(siz, x2.Spe, label="X2", title="Specificity")
-    plot!(SpePlot, siz, mi.Spe, label="MI")
-    plot!(SpePlot, siz, aic.Spe, label="AIC")
-    plot!(SpePlot, siz, bic.Spe, label="BIC")
+    SpePlot =  plot(siz, x2.Spe, label="X2", title="Specificity",ribbon = x2sd.Sen)
+    plot!(SpePlot, siz, mi.Spe, label="MI", ribbon = misd.Spe)
+    plot!(SpePlot, siz, aic.Spe, label="AIC", ribbon = aicsd.Spe)
+    plot!(SpePlot, siz, bic.Spe, label="BIC", ribbon = bicsd.Spe)
 
-    AUCPlot =  plot(siz, x2.AUC, label="X2", title="AUC")
-    plot!(AUCPlot, siz, mi.AUC, label="MI")
-    plot!(AUCPlot, siz, aic.AUC, label="AIC")
-    plot!(AUCPlot, siz, bic.AUC, label="BIC")
+    AUCPlot =  plot(siz, x2.AUC, label="X2", title="AUC",ribbon = x2sd.Sen)
+    plot!(AUCPlot, siz, mi.AUC, label="MI", ribbon = misd.AUC)
+    plot!(AUCPlot, siz, aic.AUC, label="AIC", ribbon = aicsd.AUC)
+    plot!(AUCPlot, siz, bic.AUC, label="BIC", ribbon = bicsd.AUC)
 
-    l = @layout [a b; c d]
+    l = @layout [a ; c d]
 
     plot(AccPlot, SenPlot, SpePlot, size= (700,800),
     plot_title = "alpha ≤ 0.05, thresh ≤ 1", layout=l)
@@ -65,3 +65,9 @@ end
 #bic.Spe[4] = "0" 
 #aic
 #x2
+clipboard(sprint(show, "text/tab-separated-values",  DataFrame(x2mean=x2.AUC,SD=x2sd.AUC)))
+
+clipboard(sprint(show, "text/csv", DataFrame(x2mean=x2.AUC,SD=x2sd.AUC)))
+
+clipboard(sprint(show, "text/tab-separated-values",  DataFrame(mean=mi.AUC,SD=misd.AUC)))
+clipboard(sprint(show, "text/tab-separated-values",  DataFrame(mean=bic.AUC,SD=bicsd.AUC)))

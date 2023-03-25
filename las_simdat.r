@@ -29,7 +29,7 @@ run.analysis <- function(pvals, thresholds, siz,
                 colnames(aicperf) <- 
                 colnames(bicperf) <- c("Acc", "Spe","Sen","AUC")
 
-        for (n in 1:10){
+        for (n in 1:3){
             simdata <- gen.data(QMat = QMat, g=g, s=s, corr=corr,
                             model = model,N=siz[i])
 
@@ -62,7 +62,7 @@ run.analysis2 <- function(pvals, thresholds, siz,
         #x2perf <- miperf <- as.data.frame(matrix(0,length(pvals),4))
         #aicperf <- bicperf <- as.data.frame(matrix(0, length(thresholds),4))
         N = 25 
-        x2perf <- miperf <- aicperf <- bicperf <- vector("list",N)
+        x2perf <- miperf <- aicperf <- bicperf <- gaicperf <- vector("list",N)
         #colnames(x2perf) <- 
         #        colnames(miperf) <- 
         #        colnames(aicperf) <- 
@@ -78,23 +78,26 @@ run.analysis2 <- function(pvals, thresholds, siz,
             miperf[[n]] <- sim_i$mi
             aicperf[[n]] <- sim_i$aic
             bicperf[[n]] <- sim_i$bic
+            gaicperf[[n]] <- sim_i$gaic
         }# end of loop for simulation runs 
         
         x2mean <- apply( abind::abind(x2perf, along=3),  1:2, mean)
         mimean <- apply( abind::abind(miperf, along=3),  1:2, mean)
         aicmean <- apply( abind::abind(aicperf, along=3),  1:2, mean)
         bicmean <- apply( abind::abind(bicperf, along=3),  1:2, mean)
+        gaicmean <- apply( abind::abind(gaicperf, along=3),  1:2, mean)
         
         x2sd <- apply( abind::abind(x2perf, along=3),  1:2, sd)
         misd <- apply( abind::abind(miperf, along=3),  1:2, sd)
         aicsd <- apply( abind::abind(aicperf, along=3),  1:2, sd)
         bicsd <- apply( abind::abind(bicperf, along=3),  1:2, sd)
+        gaicsd <- apply( abind::abind(gaicperf, along=3),  1:2, sd)
 
         mean_results[[i]] <- list(x2=x2mean, mi=mimean, 
-                          aic=aicmean, bic=bicmean)
+                          aic=aicmean, bic=bicmean, gaic=gaicmean)
 
         sd_results[[i]] <- list(x2=x2sd, mi=misd, 
-                          aic=aicsd, bic=bicsd)
+                          aic=aicsd, bic=bicsd, gaic=gaicsd)
     } # end of loop through siz vector
     results = list(mean=mean_results, sd=sd_results)
 return(results)
