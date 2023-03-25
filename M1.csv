@@ -1,0 +1,33 @@
+cat,testname,units,res
+info,SysBenchVer,,0.4.1
+info,JuliaVer,,1.8.3
+info,OS,,macOS (arm64-apple-darwin21.3.0)
+info,CPU,,8 × Apple M1
+info,CPU_THREADS,,4
+info,WORD_SIZE,,64
+info,LIBM,,libopenlibm
+info,LLVM,,"libLLVM-13.0.1 (ORCJIT, apple-m1)"
+info,BLAS,,libopenblas64_
+info,BLAS_threads,,4
+info,GPU,,
+cpu,FloatMul,ms,2.2080000000000003e-6
+cpu,FusedMulAdd,ms,2.2080000000000003e-6
+cpu,FloatSin,ms,4.708999999999999e-6
+cpu,VecMulBroad,ms,4.510775427995972e-5
+cpu,CPUMatMul,ms,0.045167
+cpu,MatMulBroad,ms,0.0039083
+cpu,3DMulBroad,ms,0.0011343537414965986
+cpu,peakflops,flops,1.6618405605030914e11
+cpu,FFMPEGH264Write,ms,250.0823335
+mem,DeepCopy,ms,0.0001897897545357524
+mem,Bandwidth10kB,MiB/s,79928.6316927549
+mem,Bandwidth100kB,MiB/s,85081.12377609509
+mem,Bandwidth1MB,MiB/s,60233.3301589244
+mem,Bandwidth10MB,MiB/s,33609.66753854626
+mem,Bandwidth100MB,MiB/s,28756.528330066714
+diskio,DiskWrite1KB,ms,0.041167
+diskio,DiskWrite1MB,ms,0.248708
+diskio,DiskRead1KB,ms,0.008575
+diskio,DiskRead1MB,ms,0.36625
+loading,JuliaLoad,ms,78.949708
+compilation,compilecache,ms,130.847042

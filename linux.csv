@@ -1,0 +1,33 @@
+cat,testname,units,res
+info,SysBenchVer,,0.4.1
+info,JuliaVer,,1.8.5
+info,OS,,Linux (x86_64-linux-gnu)
+info,CPU,,24 × 12th Gen Intel(R) Core(TM) i9-12900K
+info,CPU_THREADS,,24
+info,WORD_SIZE,,64
+info,LIBM,,libopenlibm
+info,LLVM,,"libLLVM-13.0.1 (ORCJIT, goldmont)"
+info,BLAS,,libopenblas64_
+info,BLAS_threads,,12
+info,GPU,,
+cpu,FloatMul,ms,1.8249999999999999e-6
+cpu,FusedMulAdd,ms,1.8200000000000002e-6
+cpu,FloatSin,ms,3.6230000000000003e-6
+cpu,VecMulBroad,ms,4.984588353413655e-5
+cpu,CPUMatMul,ms,0.0185165
+cpu,MatMulBroad,ms,0.0025965555555555555
+cpu,3DMulBroad,ms,0.0008363781512605042
+cpu,peakflops,flops,2.9833466791482434e11
+cpu,FFMPEGH264Write,ms,241.233669
+mem,DeepCopy,ms,0.00035764748953974896
+mem,Bandwidth10kB,MiB/s,180766.1166262857
+mem,Bandwidth100kB,MiB/s,52190.352783136324
+mem,Bandwidth1MB,MiB/s,20726.643406203817
+mem,Bandwidth10MB,MiB/s,19757.245065346513
+mem,Bandwidth100MB,MiB/s,20761.504612984638
+diskio,DiskWrite1KB,ms,0.0264475
+diskio,DiskWrite1MB,ms,1.665183
+diskio,DiskRead1KB,ms,0.004017625
+diskio,DiskRead1MB,ms,0.1080495
+loading,JuliaLoad,ms,78.762316
+compilation,compilecache,ms,141.6636475

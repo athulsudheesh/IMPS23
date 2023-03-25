@@ -44,7 +44,7 @@ GAIC <- function(model){
     }
 
     n <- nobs(model)
-    gaic = -logLik(model)[1]/n + tr(robust_vcov %*% pinv(opg_vcov))/n
+    gaic = -logLik(model)[1]/n + tr(bread(model)*meat(model))/n
     return(gaic)
 }
 
