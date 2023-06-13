@@ -23,6 +23,8 @@ begin
     plot!(siz,auc.AIC ,ribbon=aucsd.AIC, label = "AIC")
     plot!(siz,auc.BIC ,ribbon=aucsd.BIC, label = "BIC")
     plot!(siz,auc.GAIC ,ribbon=aucsd.GIAC, label = "GAIC")
+    plot!(siz,auc.XBIC ,ribbon=aucsd.XBIC, label = "XBIC", color=:goldenrod4)
+    plot!(siz,auc.DIMT ,ribbon=aucsd.DIMT, label = "D-IMT", color=:deepskyblue4)
     hline!([0.5], linestyle = :dash, lw=1, label=false)
     hline!([0.7], linestyle = :dash, lw=1, label=false)
     hline!([0.8], linestyle = :dash, lw=1, label=false)

@@ -8,7 +8,7 @@ defaultW <- getOption("warn")
 options(warn = -1) 
 
 source("las_simdat.r")
-
+counter <- 0
 pvals <- c(0.001, 0.005,0.01,.05,0.1,0.2,0.3, 0.4, 0.5, 0.7, 0.8, 0.9)
 thresholds <- c(0.0001, 0.001, 0.005,0.01,.05,0.1,0.2,0.3, 0.4, 0.5, 0.7, 0.8, 0.9, 1, 1.25, 1.5, 2, 2.5, 3, 5, 10, 20, 150) 
 
@@ -17,6 +17,10 @@ siz <- c(200, 500,1000,2000)
 tic("Run Time")
 res = run.analysis2(pvals, thresholds, siz)
 toc()
+
+
+
+
 get_vals <- function(i,j){
 x2 <- rbind(res$mean[[1]]$x2[i,],
                 res$mean[[2]]$x2[i,],
@@ -96,41 +100,53 @@ get_auc <- function(){
     aicSpe <- res$mean[[i]]$aic[,2]
     bicSpe <- res$mean[[i]]$bic[,2]
     gaicSpe <- res$mean[[i]]$gaic[,2]
+    xbicSpe <- res$mean[[i]]$xbic[,2]
+    dimtSpe <- res$mean[[i]]$dimt[,2]
 
     x2Spesd <- res$sd[[i]]$x2[,2]
     miSpesd <- res$sd[[i]]$mi[,2]
     aicSpesd <- res$sd[[i]]$aic[,2]
     bicSpesd <- res$sd[[i]]$bic[,2]
     gaicSpesd <- res$sd[[i]]$gaic[,2]
+    xbicSpesd <- res$sd[[i]]$xbic[,2]
+    dimtSpesd <- res$sd[[i]]$dimt[,2]
 
     x2Sen <- res$mean[[i]]$x2[,3]
     miSen <- res$mean[[i]]$mi[,3]
     aicSen <- res$mean[[i]]$aic[,3]
     bicSen <- res$mean[[i]]$bic[,3]
     gaicSen <- res$mean[[i]]$gaic[,3]
+    xbicSen <- res$mean[[i]]$xbic[,3]
+    dimtSen <- res$mean[[i]]$dimt[,3]
 
     x2Sensd <- res$sd[[i]]$x2[,3]
     miSensd <- res$sd[[i]]$mi[,3]
     aicSensd <- res$sd[[i]]$aic[,3]
     bicSensd <- res$sd[[i]]$bic[,3]
     gaicSensd <- res$sd[[i]]$gaic[,3]
+    xbicSensd <- res$sd[[i]]$xbic[,3]
+    dimtSensd <- res$sd[[i]]$dimt[,3]
 
     x2 <- trapz(1 - x2Spe, x2Sen)
     mi <- trapz(1 - miSpe, miSen)
     aic <- trapz(1 - aicSpe, aicSen)
     bic <- trapz(1 - bicSpe, bicSen)
     gaic <- trapz(1 - gaicSpe, gaicSen)
+    xbic <- trapz(1 - xbicSpe, xbicSen)
+    dimt <- trapz(1 - dimtSpe, dimtSen)
 
     x2sd <- trapz(x2Spesd, x2Sensd)
     misd <- trapz(miSpesd, miSensd)
     aicsd <- trapz(aicSpesd, aicSensd)
     bicsd <- trapz(bicSpesd, bicSensd)
     gaicsd <- trapz(gaicSpesd, gaicSensd)
-    auc <- rbind(auc, c(x2,mi,aic,bic, gaic))
-    aucsd <- rbind(aucsd, c(x2sd,misd,aicsd,bicsd, gaicsd))
+    xbicsd <- trapz(xbicSpesd, xbicSensd)
+    dimtsd <- trapz(dimtSpesd, dimtSensd)
+    auc <- rbind(auc, c(x2,mi,aic,bic, gaic, xbic, dimt))
+    aucsd <- rbind(aucsd, c(x2sd,misd,aicsd,bicsd, gaicsd, xbicsd, dimtsd))
     }
-    colnames(auc) = c("X2","MI","AIC","BIC", "GAIC")
-    colnames(aucsd) = c("X2","MI","AIC","BIC","GIAC")
+    colnames(auc) = c("X2","MI","AIC","BIC", "GAIC", "XBIC", "DIMT")
+    colnames(aucsd) = c("X2","MI","AIC","BIC","GIAC", "XBIC", "DIMT")
     
     write.csv(auc, "auc.csv")
     write.csv(aucsd, "aucsd.csv")

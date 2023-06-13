@@ -61,8 +61,8 @@ run.analysis2 <- function(pvals, thresholds, siz,
           pb$tick()
         #x2perf <- miperf <- as.data.frame(matrix(0,length(pvals),4))
         #aicperf <- bicperf <- as.data.frame(matrix(0, length(thresholds),4))
-        N = 25 
-        x2perf <- miperf <- aicperf <- bicperf <- gaicperf <- vector("list",N)
+        N = 10 
+        x2perf <- miperf <- aicperf <- bicperf <- gaicperf <- xbicperf<- dimtperf <- vector("list",N)
         #colnames(x2perf) <- 
         #        colnames(miperf) <- 
         #        colnames(aicperf) <- 
@@ -79,6 +79,8 @@ run.analysis2 <- function(pvals, thresholds, siz,
             aicperf[[n]] <- sim_i$aic
             bicperf[[n]] <- sim_i$bic
             gaicperf[[n]] <- sim_i$gaic
+            xbicperf[[n]] <- sim_i$xbic
+            dimtperf[[n]] <- sim_i$dimt
         }# end of loop for simulation runs 
         
         x2mean <- apply( abind::abind(x2perf, along=3),  1:2, mean)
@@ -86,18 +88,22 @@ run.analysis2 <- function(pvals, thresholds, siz,
         aicmean <- apply( abind::abind(aicperf, along=3),  1:2, mean)
         bicmean <- apply( abind::abind(bicperf, along=3),  1:2, mean)
         gaicmean <- apply( abind::abind(gaicperf, along=3),  1:2, mean)
+        xbicmean <- apply( abind::abind(xbicperf, along=3),  1:2, mean)
+        dimtmean <- apply( abind::abind(dimtperf, along=3),  1:2, mean)
         
         x2sd <- apply( abind::abind(x2perf, along=3),  1:2, sd)
         misd <- apply( abind::abind(miperf, along=3),  1:2, sd)
         aicsd <- apply( abind::abind(aicperf, along=3),  1:2, sd)
         bicsd <- apply( abind::abind(bicperf, along=3),  1:2, sd)
         gaicsd <- apply( abind::abind(gaicperf, along=3),  1:2, sd)
+        xbicsd <- apply( abind::abind(xbicperf, along=3),  1:2, sd)
+        dimtsd <- apply( abind::abind(dimtperf, along=3),  1:2, sd)
 
         mean_results[[i]] <- list(x2=x2mean, mi=mimean, 
-                          aic=aicmean, bic=bicmean, gaic=gaicmean)
+                          aic=aicmean, bic=bicmean, gaic=gaicmean, xbic=xbicmean, dimt=dimtmean)
 
         sd_results[[i]] <- list(x2=x2sd, mi=misd, 
-                          aic=aicsd, bic=bicsd, gaic=gaicsd)
+                          aic=aicsd, bic=bicsd, gaic=gaicsd, xbic = xbicsd, dimt = dimtsd)
     } # end of loop through siz vector
     results = list(mean=mean_results, sd=sd_results)
 return(results)

@@ -7,7 +7,7 @@ source("last_utils.r")
 # thresh1   0   0   0   0
 # thresh2   0   0   0   0
 run.tests <- function(simdata, pvals,thresholds){
-    x2res <- mires <- aicres <- bicres <- gaicres <- vector()
+    x2res <- mires <- aicres <- bicres <- gaicres <- xbicres <- dimtres <- vector()
 
     for (i in 1:length(pvals)){
 
@@ -24,10 +24,14 @@ run.tests <- function(simdata, pvals,thresholds){
         aic <- ptres$aic
         bic <- ptres$bic
         gaic <- ptres$gaic
+        xbic <- ptres$xbic
+        dimt <- ptres$dimt
 
         aicres <- rbind(aicres, c(aic$acc, aic$spe, aic$sen, aic$auc))
         bicres <- rbind(bicres, c(bic$acc, bic$spe, bic$sen, bic$auc))
         gaicres <- rbind(gaicres, c(gaic$acc, gaic$spe, gaic$sen, gaic$auc))
+        xbicres <- rbind(xbicres, c(xbic$acc, xbic$spe, xbic$sen, xbic$auc))
+        dimtres <- rbind(dimtres, c(dimt$acc, dimt$spe, dimt$sen, dimt$auc))
     }
 
     # Formatting the results data structure 
@@ -35,20 +39,26 @@ run.tests <- function(simdata, pvals,thresholds){
                       mires = mires,
                       aicres = aicres,
                       bicres = bicres,
-                      gaicres=gaicres),function(x) as.data.frame(x))
+                      gaicres=gaicres,
+                      xbicres = xbicres,
+                      dimtres = dimtres),function(x) as.data.frame(x))
 
     colnames(res$x2res) <- 
         colnames(res$mires) <- 
         colnames(res$aicres) <- 
         colnames(res$bicres) <- 
-        colnames(res$gaicres) <- c("Acc", "Spe","Sen","AUC")
+        colnames(res$gaicres) <-
+        colnames(res$xbicres)<- 
+        colnames(res$dimtres) <-c("Acc", "Spe","Sen","AUC")
      
     out = list(
         x2 = res$x2res,
         mi = res$mires,
         aic = res$aicres,
         bic = res$bicres,
-        gaic = res$gaicres
+        gaic = res$gaicres, 
+        xbic = res$xbicres,
+        dimt = res$dimtres
     )
     return(out)
 }
@@ -87,16 +97,22 @@ ptests <- function(simdata,threshold){
     aicpred <- as.data.frame(rbind(dep_res$aic,ind_res$aic))
     bicpred <- as.data.frame(rbind(dep_res$bic,ind_res$bic))
     gaicpred <- as.data.frame(rbind(dep_res$gaic,ind_res$gaic))
+    xbicpred <- as.data.frame(rbind(dep_res$xbic,ind_res$xbic))
+    dimtpred <- as.data.frame(rbind(dep_res$dimt,ind_res$dimt))
 
     aicpred <- as.data.frame(lapply(aicpred, as.factor))
     bicpred <- as.data.frame(lapply(bicpred, as.factor))
     gaicpred <- as.data.frame(lapply(gaicpred, as.factor))
+    xbicpred <- as.data.frame(lapply(xbicpred, as.factor))
+    dimtpred <- as.data.frame(lapply(dimtpred, as.factor))
     
 
     aic = getReport(aicpred)
     bic = getReport(bicpred)
     gaic = getReport(gaicpred)
-    out = list(aic = aic, bic = bic, gaic=gaic)
+    xbic = getReport(xbicpred)
+    dimt = getReport(dimtpred)
+    out = list(aic = aic, bic = bic, gaic=gaic, xbic= xbic, dimt = dimt)
     return(out) 
 
 }
@@ -138,6 +154,8 @@ pdep <- function(simdata,threshold) {
      aic <- vector()
      bic <- vector()
      gaic <- vector()
+     xbic <- vector()
+     dimt <- vector()
      
      QMat <- simdata$QMat
      XMat <- simdata$X
@@ -153,16 +171,20 @@ pdep <- function(simdata,threshold) {
                 
             aic_pred <- ci.aic(nested_models$full, nested_models$reduced, threshold)
             bic_pred <- ci.bic(nested_models$full, nested_models$reduced, threshold)    
-            gaic_pred <- ci.gaic(nested_models$full, nested_models$reduced, threshold) 
+            gaic_pred <- ci.gaic(nested_models$full, nested_models$reduced, threshold)
+            xbic_pred <- ci.xbic(nested_models$full, nested_models$reduced, threshold) 
+            dimt_pred <- ci.dimt(nested_models$full, nested_models$reduced, threshold) 
             
             aic <- rbind(aic, c("1", aic_pred))
             bic <- rbind(bic,c("1", bic_pred))
             gaic <- rbind(gaic,c("1", gaic_pred))
+            xbic <- rbind(xbic,c("1", xbic_pred))
+            dimt <- rbind(dimt,c("1", dimt_pred))
         }
     }
      
 
-     out = list(aic=aic,bic=bic, gaic=gaic)
+     out = list(aic=aic,bic=bic, gaic=gaic, xbic=xbic, dimt=dimt)
      return(out)
 }
 
@@ -229,6 +251,8 @@ pind <- function(simdata, threshold){
     aic <- vector()
     bic <- vector()
     gaic <- vector()
+    xbic <- vector()
+    dimt <- vector()
     
     QMat <- simdata$QMat
     data <- simdata$XplusA
@@ -245,13 +269,17 @@ pind <- function(simdata, threshold){
         aic_pred <- ci.aic(nested_models$full, nested_models$reduced, threshold)
         bic_pred <- ci.bic(nested_models$full, nested_models$reduced, threshold)
         gaic_pred <- ci.gaic(nested_models$full, nested_models$reduced, threshold)
+        xbic_pred <- ci.xbic(nested_models$full, nested_models$reduced, threshold)
+        dimt_pred <- ci.dimt(nested_models$full, nested_models$reduced, threshold)
 
         aic <- rbind(aic,c("0", aic_pred))
         bic <- rbind(bic,c("0", bic_pred))
         gaic <- rbind(gaic,c("0", gaic_pred))
+        xbic <- rbind(xbic,c("0", xbic_pred))
+        dimt <- rbind(dimt,c("0", dimt_pred))
     }
     
-    out = list(aic=aic,bic=bic, gaic=gaic)
+    out = list(aic=aic,bic=bic, gaic=gaic, xbic=xbic, dimt = dimt)
     return(out)
 }
 
@@ -259,6 +287,8 @@ pind2 <- function(simdata, threshold){
     aic <- vector()
     bic <- vector()
     gaic <- vector()
+    xbic <- vector()
+    dimt <- vector()
     
     QMat <- simdata$QMat
     XMat <- simdata$X
@@ -277,14 +307,18 @@ pind2 <- function(simdata, threshold){
         aic_pred <- ci.aic(nested_models$full, nested_models$reduced, threshold)
         bic_pred <- ci.bic(nested_models$full, nested_models$reduced, threshold)
         gaic_pred <- ci.gaic(nested_models$full, nested_models$reduced, threshold)
+        xbic_pred <- ci.xbic(nested_models$full, nested_models$reduced, threshold)
+        dimt_pred <- ci.dimt(nested_models$full, nested_models$reduced, threshold)
         
         aic <- rbind(aic,c("0", aic_pred))
         bic <- rbind(bic,c("0", bic_pred))
         gaic <- rbind(gaic,c("0", gaic_pred))
+        xbic <- rbind(xbic,c("0", xbic_pred))
+        dimt <- rbind(dimt,c("0", dimt_pred))
         }
     }
     
-    out = list(aic=aic,bic=bic, gaic=gaic)
+    out = list(aic=aic,bic=bic, gaic=gaic, xbic=xbic, dimt = dimt)
     return(out)
 }
 
@@ -409,6 +443,32 @@ ci.gaic <- function(fullmodel, reducedmodel, threshold){
     delta <- GAIC(fullmodel) - GAIC(reducedmodel)
     decision <- exp(0.5*delta)
     if (decision < threshold){
+        dep <- "1"
+    }
+
+    else{
+        dep <- "0"
+    }
+}
+
+ci.xbic <- function(fullmodel, reducedmodel, threshold){
+    
+    delta <- XBIC(fullmodel) - XBIC(reducedmodel)
+    decision <- exp(0.5*delta)
+    if (decision < threshold){
+        dep <- "1"
+    }
+
+    else{
+        dep <- "0"
+    }
+}
+
+ci.dimt <- function(fullmodel, reducedmodel, threshold){
+    
+    delta <- DIMT(fullmodel) - DIMT(reducedmodel)
+    decision <- exp(0.5*delta)
+    if (abs(DIMT(fullmodel)) < threshold){
         dep <- "1"
     }
 
