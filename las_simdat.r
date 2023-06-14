@@ -61,7 +61,7 @@ run.analysis2 <- function(pvals, thresholds, siz,
           pb$tick()
         #x2perf <- miperf <- as.data.frame(matrix(0,length(pvals),4))
         #aicperf <- bicperf <- as.data.frame(matrix(0, length(thresholds),4))
-        N = 10 
+        N = 100 
         x2perf <- miperf <- aicperf <- bicperf <- gaicperf <- xbicperf<- dimtperf <- vector("list",N)
         #colnames(x2perf) <- 
         #        colnames(miperf) <- 

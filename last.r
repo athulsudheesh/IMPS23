@@ -218,11 +218,17 @@ get_roc <- function(i){
     mi <- res$mean[[i]]$mi[,c(2,3)]
     aic <- res$mean[[i]]$aic[,c(2,3)]
     bic <- res$mean[[i]]$bic[,c(2,3)]
+    gaic <- res$mean[[i]]$gaic[,c(2,3)]
+    xbic <- res$mean[[i]]$xbic[,c(2,3)]
+    dimt <- res$mean[[i]]$dimt[,c(2,3)]
 
     x2sd <- res$sd[[i]]$x2[,c(2,3)]
     misd <- res$sd[[i]]$mi[,c(2,3)]
     aicsd <- res$sd[[i]]$aic[,c(2,3)]
     bicsd <- res$sd[[i]]$bic[,c(2,3)]
+    gaicsd <- res$sd[[i]]$gaic[,c(2,3)]
+    xbicsd <- res$sd[[i]]$xbic[,c(2,3)]
+    dimtsd <- res$sd[[i]]$dimt[,c(2,3)]
 
     
     #out = list(auc=auc, sd = aucsd)
@@ -231,11 +237,18 @@ get_roc <- function(i){
     write.csv(mi, "miroc.csv")
     write.csv(aic, "aicroc.csv")
     write.csv(bic, "bicroc.csv")
+    write.csv(gaic, "gaicroc.csv")
+    write.csv(xbic, "xbicroc.csv")
+    write.csv(dimt, "dimtroc.csv")
+    
 
     write.csv(x2sd, "x2rocsd.csv")
     write.csv(misd, "mirocsd.csv")
     write.csv(aicsd, "aicrocsd.csv")
     write.csv(bicsd, "bicrocsd.csv")
+    write.csv(gaicsd, "gaicrocsd.csv")
+    write.csv(xbicsd, "xbicrocsd.csv")
+    write.csv(dimtsd, "dimtrocsd.csv")
 }
 
 get_roc(4)

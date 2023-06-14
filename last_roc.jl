@@ -5,6 +5,8 @@ x2 = CSV.read("x2roc.csv", DataFrame)
 mi = CSV.read("miroc.csv", DataFrame)
 aic = CSV.read("aicroc.csv", DataFrame)
 bic = CSV.read("bicroc.csv", DataFrame)
+gaic = CSV.read("gaicroc.csv", DataFrame)
+xbic = CSV.read("xbicroc.csv", DataFrame)
 
 auc = CSV.read("auc.csv", DataFrame)
 aucsd = CSV.read("aucsd.csv", DataFrame)
@@ -34,16 +36,22 @@ select!(x2, Not(:Column1))
 select!(mi, Not(:Column1))
 select!(aic, Not(:Column1))
 select!(bic, Not(:Column1))
+select!(xbic, Not(:Column1))
+select!(gaic, Not(:Column1))
 
 x2sd = CSV.read("x2rocsd.csv", DataFrame)
 misd = CSV.read("mirocsd.csv", DataFrame)
 aicsd = CSV.read("aicrocsd.csv", DataFrame)
 bicsd = CSV.read("bicrocsd.csv", DataFrame)
+gaicsd = CSV.read("gaicrocsd.csv", DataFrame)
+xbicsd = CSV.read("xbicrocsd.csv", DataFrame)
 
 select!(x2sd, Not(:Column1))
 select!(misd, Not(:Column1))
 select!(aicsd, Not(:Column1))
 select!(bicsd, Not(:Column1))
+select!(xbicsd, Not(:Column1))
+select!(gaicsd, Not(:Column1))
 
 default()
 
@@ -60,6 +68,8 @@ begin
     plot!(1 .- mi.Spe,mi.Sen, label = "MI",ribbon=(misd.Spe, misd.Sen), fillalpha=0.2,marker = ([:c :d], 5, 0.8, Plots.stroke(3, :gray)))
     plot!(1 .- aic.Spe,aic.Sen, label = "AIC",ribbon=(aicsd.Spe, aicsd.Sen), fillalpha=0.2,marker = ([:c :d], 5, 0.8, Plots.stroke(3, :gray)))
     plot!(1 .- bic.Spe,bic.Sen, label = "BIC",ribbon=(bicsd.Spe, bicsd.Sen), fillalpha=0.2,marker = ([:c :d], 5, 0.8, Plots.stroke(3, :gray)))
+    plot!(1 .- xbic.Spe,xbic.Sen, label = "XBIC",ribbon=(xbicsd.Spe, xbicsd.Sen), fillalpha=0.2,marker = ([:c :d], 5, 0.8, Plots.stroke(3, :gray)))
+    plot!(1 .- gaic.Spe,gaic.Sen, label = "GAIC",ribbon=(gaicsd.Spe, gaicsd.Sen), fillalpha=0.2,marker = ([:c :d], 5, 0.8, Plots.stroke(3, :gray)))
     Plots.abline!(1,0,line=:dash, color="black", alpha=0.2)
 end
 
